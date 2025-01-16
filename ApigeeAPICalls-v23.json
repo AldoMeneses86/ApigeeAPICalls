@@ -1,0 +1,864 @@
+{
+  "name": "projects/562880453191/locations/us-central1/integrations/ApigeeAPICalls/versions/5ff19016-9747-4dee-8022-0ee2819fe698",
+  "description": "Integration Pattern to export the Apigee API Calls",
+  "updateTime": "2025-01-16T13:53:38.811Z",
+  "createTime": "2025-01-16T13:51:53.660Z",
+  "lastModifierEmail": "admin@aldomeneses.altostrat.com",
+  "triggerConfigs": [{
+    "label": "API Call per Env",
+    "startTasks": [{
+      "taskId": "12"
+    }],
+    "properties": {
+      "Trigger name": "ApigeeAPICalls_API_2"
+    },
+    "triggerType": "API",
+    "triggerNumber": "3",
+    "triggerId": "api_trigger/ApigeeAPICalls_API_2",
+    "position": {
+      "x": 280,
+      "y": -257
+    },
+    "inputVariables": {
+      "names": ["endDate", "startDate", "env_input", "output_response", "timeRange", "endHour", "startHour"]
+    },
+    "outputVariables": {
+      "names": ["total_api_calls", "dataSpreadsheet"]
+    }
+  }, {
+    "label": "API Trigger",
+    "startTasks": [{
+      "taskId": "13"
+    }],
+    "properties": {
+      "Trigger name": "ApigeeAPICalls_API_1"
+    },
+    "triggerType": "API",
+    "triggerNumber": "2",
+    "triggerId": "api_trigger/ApigeeAPICalls_API_1",
+    "position": {
+      "x": -464,
+      "y": -224
+    },
+    "inputVariables": {
+      "names": ["endDate", "startDate", "env_input", "output_response", "timeRange", "endHour", "startHour"]
+    },
+    "outputVariables": {
+      "names": ["total_api_calls", "dataSpreadsheet"]
+    }
+  }, {
+    "label": "Schedule Trigger",
+    "startTasks": [{
+      "taskId": "16"
+    }],
+    "properties": {
+      "Timer Name": "ApigeeAPICalls_Timer_1",
+      "Scheduled Time spec": "59 23 15 * *"
+    },
+    "triggerType": "CRON",
+    "triggerNumber": "1",
+    "triggerId": "cron_trigger/ApigeeAPICalls_Timer_1/59+23+15+*+*",
+    "position": {
+      "x": -128,
+      "y": -320
+    }
+  }],
+  "taskConfigs": [{
+    "task": "FieldMappingTask",
+    "taskId": "12",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$apigee_endpoint$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$env_input$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apigee_endpoint$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$apigee_endpoint$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$apigee_path_stats$\"\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$timeRange$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apigee_endpoint$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "5"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Create endpoint data mapping",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 288,
+      "y": -160
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "13",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$startDate$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \" \"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$startHour$\"\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"~\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$endDate$\"\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \" \"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$endHour$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$timeRange$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "2"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "TimeRange Data Mapping",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -128,
+      "y": -80
+    }
+  }, {
+    "task": "JavaScriptTask",
+    "taskId": "14",
+    "parameters": {
+      "script": {
+        "key": "script",
+        "value": {
+          "stringValue": "function executeScript(event) {\n  // Retrieve data from source parameters\n  var env \u003d event.getParameter(\"env_input\");\n  var startDate \u003d event.getParameter(\"startDate\");\n  var startHour \u003d event.getParameter(\"startHour\");\n  var endDate \u003d event.getParameter(\"endDate\");\n  var endHour \u003d event.getParameter(\"endHour\");\n  var apiCalls \u003d event.getParameter(\"total_api_calls\");\n\n  // Create the target parameter object\n  var taskRequest \u003d {\n    \"range\": \"A2:F2\", // Assuming data will be written to \"Sheet1\"\n    \"majorDimension\": \"COLUMNS\", // Setting major dimension to ROWS\n    \"values\": [[env],[startDate],[startHour],[endDate],[endHour],[apiCalls]] // Assuming extractedData is an array\n  };\n\n  // Set the target parameter\n  event.log(taskRequest);\n  event.setParameter(\"`Task_15_request`\", taskRequest);\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "15"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "JavaScript",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 272,
+      "y": 384
+    }
+  }, {
+    "task": "Sheets - Append",
+    "taskId": "15",
+    "parameters": {
+      "responseValueRenderOption": {
+        "key": "responseValueRenderOption",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "request": {
+        "key": "request",
+        "value": {
+          "stringValue": "$`Task_15_request`$"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": "AuthProfileSpreadsheet"
+        }
+      },
+      "valueInputOption": {
+        "key": "valueInputOption",
+        "value": {
+          "stringValue": "USER_ENTERED"
+        }
+      },
+      "authConfig": {
+        "key": "authConfig",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.authconfig.AuthConfigTaskParam\"\n}"
+        }
+      },
+      "response": {
+        "key": "response",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_15_response`$"]
+          }
+        }
+      },
+      "insertDataOption": {
+        "key": "insertDataOption",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "range": {
+        "key": "range",
+        "value": {
+          "stringValue": "A2:F2"
+        }
+      },
+      "spreadsheetId": {
+        "key": "spreadsheetId",
+        "value": {
+          "stringValue": "1L3we8miNW_OYc5mEtiBWB4slbwa2hFALJhNK8NmytDU"
+        }
+      },
+      "responseDateTimeRenderOption": {
+        "key": "responseDateTimeRenderOption",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "includeValuesInResponse": {
+        "key": "includeValuesInResponse",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "taskTemplateId": {
+        "key": "taskTemplateId",
+        "value": {
+          "stringValue": "38ae59a8-5adb-4820-96cc-eae1b8131576"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Sheets - Append (Preview)",
+    "taskTemplate": "Sheets - Append",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 272,
+      "y": 528
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "16",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"NOW_IN_MILLIS\"\n              }\n            }\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"SUBTRACT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"1210000000\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"EPOCH_TO_HUMAN_READABLE_TIME\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"MM/dd/YYYY\"\n              }\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"GMT\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$startDate$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"NOW_IN_MILLIS\"\n              }\n            }\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"EPOCH_TO_HUMAN_READABLE_TIME\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"MM/dd/YYYY\"\n              }\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"GMT\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$endDate$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "13"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Schedule Data Mapping",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -128,
+      "y": -208
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "2",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_2_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams"
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": "Apigee Analytics Export"
+        }
+      },
+      "authConfig": {
+        "key": "authConfig",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.authconfig.AuthConfigTaskParam\"\n}"
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_2_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_2_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://apigee.googleapis.com/v1/organizations/apigee-svc-eval-01/environments"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "3"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Get Apigee Env",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -128,
+      "y": 32
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "3",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_2_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$envs$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "6"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Get Envs-Array",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -128,
+      "y": 144
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "5",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_5_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams"
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": "Apigee Analytics Export"
+        }
+      },
+      "authConfig": {
+        "key": "authConfig",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.authconfig.AuthConfigTaskParam\"\n}"
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_5_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_5_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "$apigee_endpoint$"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "7"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "GET API Calls",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 288,
+      "y": -64
+    }
+  }, {
+    "task": "SubWorkflowForEachLoopV2Task",
+    "taskId": "6",
+    "parameters": {
+      "iterationElementMapping": {
+        "key": "iterationElementMapping",
+        "value": {
+          "stringValue": "env_input"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/ApigeeAPICalls_API_2"
+        }
+      },
+      "aggregatorParameterMapping": {
+        "key": "aggregatorParameterMapping"
+      },
+      "loopMetadata": {
+        "key": "loopMetadata",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_6_loopMetadata`$"]
+          }
+        }
+      },
+      "disableEucPropagation": {
+        "key": "disableEucPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "listToIterate": {
+        "key": "listToIterate",
+        "value": {
+          "stringValue": "$envs$"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "ApigeeAPICalls"
+        }
+      },
+      "requestParameterMapping": {
+        "key": "requestParameterMapping",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"timeRange\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"timeRange\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"startDate\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"startDate\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"startHour\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"startHour\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"endDate\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"endDate\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"endHour\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"endHour\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "overrideParameterMapping": {
+        "key": "overrideParameterMapping",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"total_api_calls\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"total_api_calls\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "For Each Loop API Calls",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -128,
+      "y": 272
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "7",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_5_responseBody`$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$output_response$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "8"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping response",
+    "description": "Data mapping response body",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 288,
+      "y": 32
+    }
+  }, {
+    "task": "JsonnetMapperTask",
+    "taskId": "8",
+    "parameters": {
+      "template": {
+        "key": "template",
+        "value": {
+          "stringValue": "local f \u003d import \"functions\";\nlocal inputs \u003d {\"output_response\": std.extVar(\"output_response\")};\n{\"total\": f.resolveJsonPath(inputs[\"output_response\"],\"$.environments[:1].metrics[:1].values[:1]\")}"
+        }
+      },
+      "diagramMetadata": {
+        "key": "diagramMetadata",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/google.protobuf.Struct\",\n  \"value\": {\n    \"0\": {\n      \"inputs\": [{\n        \"name\": \"output_response\",\n        \"type\": 17.0,\n        \"tokenType\": 0.0\n      }],\n      \"outputs\": [{\n        \"name\": \"total\",\n        \"type\": 7.0,\n        \"tokenType\": 0.0\n      }],\n      \"mappings\": [{\n        \"inputs\": [\"output_response\"],\n        \"output\": \"total\",\n        \"transformation\": {\n          \"operationId\": \"TRANSFORMATION_0\",\n          \"coordinates\": [1165.0, 178.02841186523438],\n          \"operations\": [{\n            \"type\": 1.0,\n            \"key\": 133.0,\n            \"params\": [{\n              \"type\": 3.0,\n              \"value\": \"output_response\",\n              \"datatype\": 17.0\n            }, {\n              \"type\": 0.0,\n              \"value\": \"$.environments[:1].metrics[:1].values[:1]\",\n              \"datatype\": 1.0\n            }]\n          }]\n        }\n      }]\n    }\n  }\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "9"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Get values of the matrics",
+    "description": "Data Transformer to get values of the matrics",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 288,
+      "y": 160
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "9",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$total$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringArrayFunction\": {\n              \"functionName\": \"GET\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$total_api_calls$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "14"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Total of API Calls per Env",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 288,
+      "y": 288
+    }
+  }],
+  "integrationParameters": [{
+    "key": "endDate",
+    "dataType": "STRING_VALUE",
+    "displayName": "endDate",
+    "inputOutputType": "IN",
+    "description": "MM/DD/YYYY"
+  }, {
+    "key": "startDate",
+    "dataType": "STRING_VALUE",
+    "displayName": "startDate",
+    "inputOutputType": "IN",
+    "description": "MM/DD/YYYY"
+  }, {
+    "key": "`Task_2_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_2_responseHeader`",
+    "isTransient": true,
+    "producer": "1_2"
+  }, {
+    "key": "`Task_2_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_2_responseBody`",
+    "isTransient": true,
+    "producer": "1_2"
+  }, {
+    "key": "`Task_2_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_2_responseStatus`",
+    "isTransient": true,
+    "producer": "1_2"
+  }, {
+    "key": "envs",
+    "dataType": "JSON_VALUE",
+    "displayName": "envs",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"string\"\n  }\n}"
+  }, {
+    "key": "`Task_5_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_5_responseHeader`",
+    "isTransient": true,
+    "producer": "1_5"
+  }, {
+    "key": "`Task_5_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_5_responseBody`",
+    "isTransient": true,
+    "producer": "1_5"
+  }, {
+    "key": "`Task_5_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_5_responseStatus`",
+    "isTransient": true,
+    "producer": "1_5"
+  }, {
+    "key": "env_input",
+    "dataType": "STRING_VALUE",
+    "displayName": "env_input",
+    "inputOutputType": "IN"
+  }, {
+    "key": "`Task_6_loopMetadata`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_6_loopMetadata`",
+    "isTransient": true,
+    "producer": "1_6",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"sub_integration_execution_ids\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"current_iteration_count\": {\n      \"type\": \"number\"\n    },\n    \"failure_message\": {\n      \"type\": \"string\"\n    },\n    \"failure_location\": {\n      \"type\": \"string\"\n    },\n    \"current_element\": {\n      \"type\": [\"string\", \"number\", \"object\", \"array\"]\n    }\n  }\n}"
+  }, {
+    "key": "total_api_calls",
+    "dataType": "STRING_VALUE",
+    "displayName": "total_api_calls",
+    "inputOutputType": "OUT"
+  }, {
+    "key": "json",
+    "dataType": "JSON_VALUE",
+    "displayName": "json",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"array\",\n    \"items\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"values\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"string\"\n          }\n        },\n        \"name\": {\n          \"type\": \"string\"\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "key": "total",
+    "dataType": "STRING_ARRAY",
+    "displayName": "total"
+  }, {
+    "key": "output_response",
+    "dataType": "JSON_VALUE",
+    "displayName": "output_response",
+    "inputOutputType": "IN",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"metaData\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"notices\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"environments\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"metrics\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"properties\": {\n                \"values\": {\n                  \"type\": \"array\",\n                  \"items\": {\n                    \"type\": \"string\"\n                  }\n                },\n                \"name\": {\n                  \"type\": \"string\"\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "key": "requestSpreadSheet",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n  \"values\": [[1.0], [2.0], [3.0]],\n  \"majorDimension\": \"COLUMNS\"\n}"
+    },
+    "displayName": "requestSpreadSheet",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"majorDimension\": {\n      \"type\": \"string\"\n    },\n    \"values\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": \"number\"\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "key": "dataSpreadsheet",
+    "dataType": "STRING_VALUE",
+    "displayName": "dataSpreadsheet",
+    "inputOutputType": "OUT"
+  }, {
+    "key": "`ExecutionMode`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`ExecutionMode`",
+    "isTransient": true
+  }, {
+    "key": "`ErrorInfo`",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n  \"message\": \"\",\n  \"code\": 0.0\n}"
+    },
+    "displayName": "`ErrorInfo`",
+    "isTransient": true,
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"code\": {\n      \"type\": \"number\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+  }, {
+    "key": "`ExecutionId`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`ExecutionId`",
+    "isTransient": true
+  }, {
+    "key": "`IntegrationName`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`IntegrationName`",
+    "isTransient": true
+  }, {
+    "key": "`Region`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`Region`",
+    "isTransient": true
+  }, {
+    "key": "`ProjectId`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`ProjectId`",
+    "isTransient": true
+  }, {
+    "key": "apigee_path_stats",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "/stats/?select\u003dsum(message_count)\u0026timeRange\u003d"
+    },
+    "displayName": "apigee_path_stats"
+  }, {
+    "key": "apigee_endpoint",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "https://apigee.googleapis.com/v1/organizations/apigee-svc-eval-01/environments/"
+    },
+    "displayName": "apigee_endpoint",
+    "masked": true,
+    "description": " https://apigee.googleapis.com/v1/organizations/apigee-svc-eval-01/environments/eval/stats/?select\u003dsum(message_count)\u0026timeRange\u003d12%2F01%2F2024%2000%3A00~12%2F31%2F2024%2023%3A59"
+  }, {
+    "key": "timeRange",
+    "dataType": "STRING_VALUE",
+    "displayName": "timeRange",
+    "inputOutputType": "IN",
+    "masked": true
+  }, {
+    "key": "`Task_15_request`",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n}"
+    },
+    "displayName": "`Task_15_request`",
+    "isTransient": true,
+    "producer": "1_15",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"range\": {\n      \"description\": \"The range the values cover, in [A1 notation](/sheets/api/guides/concepts#cell). For output, this range indicates the entire requested range, even though the values will exclude trailing rows and columns. When appending values, this field represents the range to search for a table, after which values will be appended.\",\n      \"type\": \"string\"\n    },\n    \"majorDimension\": {\n      \"description\": \"The major dimension of the values. For output, if the spreadsheet data is: `A1\\u003d1,B1\\u003d2,A2\\u003d3,B2\\u003d4`, then requesting `range\\u003dA1:B2,majorDimension\\u003dROWS` will return `[[1,2],[3,4]]`, whereas requesting `range\\u003dA1:B2,majorDimension\\u003dCOLUMNS` will return `[[1,3],[2,4]]`. For input, with `range\\u003dA1:B2,majorDimension\\u003dROWS` then `[[1,2],[3,4]]` will set `A1\\u003d1,B1\\u003d2,A2\\u003d3,B2\\u003d4`. With `range\\u003dA1:B2,majorDimension\\u003dCOLUMNS` then `[[1,2],[3,4]]` will set `A1\\u003d1,B1\\u003d3,A2\\u003d2,B2\\u003d4`. When writing, if this field is not set, it defaults to ROWS.\",\n      \"enum\": [\"DIMENSION_UNSPECIFIED\", \"ROWS\", \"COLUMNS\"],\n      \"enumDescriptions\": [\"The default value, do not use.\", \"Operates on the rows of a sheet.\", \"Operates on the columns of a sheet.\"],\n      \"type\": \"string\"\n    },\n    \"values\": {\n      \"description\": \"The data that was read or to be written. This is an array of arrays, the outer array representing all the data and each inner array representing a major dimension. Each item in the inner array corresponds with one cell. For output, empty trailing rows and columns will not be included. For input, supported value types are: bool, string, and double. Null values will be skipped. To set a cell to an empty value, set the string value to an empty string.\",\n      \"type\": \"array\",\n      \"items\": {\n        \"items\": {\n          \"type\": \"any\"\n        },\n        \"type\": \"array\"\n      }\n    }\n  }\n}"
+  }, {
+    "key": "`Task_15_response`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_15_response`",
+    "isTransient": true,
+    "producer": "1_15",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"updates\": {\n      \"type\": \"object\",\n      \"description\": \"The response when updating a range of values in a spreadsheet.\",\n      \"properties\": {\n        \"updatedCells\": {\n          \"type\": \"integer\",\n          \"description\": \"The number of cells updated.\",\n          \"format\": \"int32\"\n        },\n        \"updatedRows\": {\n          \"format\": \"int32\",\n          \"type\": \"integer\",\n          \"description\": \"The number of rows where at least one cell in the row was updated.\"\n        },\n        \"updatedData\": {\n          \"description\": \"Data within a range of the spreadsheet.\",\n          \"type\": \"object\",\n          \"properties\": {\n            \"range\": {\n              \"description\": \"The range the values cover, in [A1 notation](/sheets/api/guides/concepts#cell). For output, this range indicates the entire requested range, even though the values will exclude trailing rows and columns. When appending values, this field represents the range to search for a table, after which values will be appended.\",\n              \"type\": \"string\"\n            },\n            \"majorDimension\": {\n              \"description\": \"The major dimension of the values. For output, if the spreadsheet data is: `A1\\u003d1,B1\\u003d2,A2\\u003d3,B2\\u003d4`, then requesting `range\\u003dA1:B2,majorDimension\\u003dROWS` will return `[[1,2],[3,4]]`, whereas requesting `range\\u003dA1:B2,majorDimension\\u003dCOLUMNS` will return `[[1,3],[2,4]]`. For input, with `range\\u003dA1:B2,majorDimension\\u003dROWS` then `[[1,2],[3,4]]` will set `A1\\u003d1,B1\\u003d2,A2\\u003d3,B2\\u003d4`. With `range\\u003dA1:B2,majorDimension\\u003dCOLUMNS` then `[[1,2],[3,4]]` will set `A1\\u003d1,B1\\u003d3,A2\\u003d2,B2\\u003d4`. When writing, if this field is not set, it defaults to ROWS.\",\n              \"enum\": [\"DIMENSION_UNSPECIFIED\", \"ROWS\", \"COLUMNS\"],\n              \"enumDescriptions\": [\"The default value, do not use.\", \"Operates on the rows of a sheet.\", \"Operates on the columns of a sheet.\"],\n              \"type\": \"string\"\n            },\n            \"values\": {\n              \"description\": \"The data that was read or to be written. This is an array of arrays, the outer array representing all the data and each inner array representing a major dimension. Each item in the inner array corresponds with one cell. For output, empty trailing rows and columns will not be included. For input, supported value types are: bool, string, and double. Null values will be skipped. To set a cell to an empty value, set the string value to an empty string.\",\n              \"type\": \"array\",\n              \"items\": {\n                \"items\": {\n                  \"type\": \"any\"\n                },\n                \"type\": \"array\"\n              }\n            }\n          }\n        },\n        \"updatedColumns\": {\n          \"format\": \"int32\",\n          \"description\": \"The number of columns where at least one cell in the column was updated.\",\n          \"type\": \"integer\"\n        },\n        \"updatedRange\": {\n          \"type\": \"string\",\n          \"description\": \"The range (in A1 notation) that updates were applied to.\"\n        },\n        \"spreadsheetId\": {\n          \"description\": \"The spreadsheet the updates were applied to.\",\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"tableRange\": {\n      \"type\": \"string\",\n      \"description\": \"The range (in A1 notation) of the table that values are being appended to (before the values were appended). Empty if no table was found.\"\n    },\n    \"spreadsheetId\": {\n      \"type\": \"string\",\n      \"description\": \"The spreadsheet the updates were applied to.\"\n    }\n  }\n}"
+  }, {
+    "key": "endHour",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "23:59"
+    },
+    "displayName": "endHour",
+    "inputOutputType": "IN",
+    "description": "HH:MM"
+  }, {
+    "key": "startHour",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "00:00"
+    },
+    "displayName": "startHour",
+    "inputOutputType": "IN",
+    "description": "HH:MM"
+  }]
+}
